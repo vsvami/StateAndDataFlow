@@ -12,18 +12,13 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-            TextField("Enter your name", text: $loginViewVM.name)
-                .multilineTextAlignment(.center)
-            Button(action: login) {
+            TextFieldView(loginViewVM: loginViewVM)
+            Button(action: loginViewVM.login) {
                 Label("OK", systemImage: "checkmark.circle")
             }
+            .disabled(!loginViewVM.nameIsValid)
         }
-    }
-    
-    private func login() {
-        if !loginViewVM.name.isEmpty {
-            loginViewVM.isLoggedIn.toggle()
-        }
+        .padding()
     }
 }
 
@@ -32,3 +27,22 @@ struct LoginView: View {
         .environmentObject(LoginViewViewModel())
 }
 
+
+struct TextFieldView: View {
+    @ObservedObject var loginViewVM: LoginViewViewModel
+    
+    var body: some View {
+        ZStack {
+            TextField("Enter your name", text: $loginViewVM.user.name)
+                .multilineTextAlignment(.center)
+            HStack {
+                Spacer()
+                Text(loginViewVM.userNameCharCount)
+                    .font(.callout)
+                    .foregroundStyle(loginViewVM.nameIsValid ? .green : .red)
+                    .padding([.top, .trailing])
+            }
+            .padding(.bottom)
+        }
+    }
+}
