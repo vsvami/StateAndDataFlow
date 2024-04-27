@@ -8,7 +8,8 @@
 import Foundation
 
 final class LoginViewViewModel: ObservableObject {
-    @Published var user: User
+    
+    @Published var user = User()
     
     var nameIsValid: Bool {
         user.name.count >= 3
